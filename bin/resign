@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'commander/import'
+
+$:.push File.expand_path("../../lib", __FILE__)
+require 'provise'
+
+HighLine.track_eof = false # Fix for built-in Ruby
+
+program :version, Provise::VERSION
+program :description, 'Re-sign iOS Apps (.ipa files)'
+
+program :help, 'Author', 'Felipe Sabino <felipe@sabino.me>'
+program :help, 'Website', 'http://twitter.com/felipesabino'
+program :help_formatter, :compact
+
+global_option '--verbose'
+default_command :help
+
+require 'provise/commands'

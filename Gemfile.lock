@@ -1,0 +1,18 @@
+PATH
+  remote: .
+  specs:
+    Provise (0.0.1)
+      commander (~> 4.1.2)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    commander (4.1.2)
+      highline (~> 1.6.11)
+    highline (1.6.15)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  Provise!

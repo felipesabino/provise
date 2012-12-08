@@ -1,0 +1,25 @@
+.bundle
+db/*.sqlite3
+log/
+tmp/
+.sass-cache/
+public/system/
+public/assets/
+*.orig
+
+# MacOS
+.DS_Store
+
+# from github template
+
+*.gem
+*.rbc
+.config
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
