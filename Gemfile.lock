@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    Provise (0.0.1)
+    provise (0.0.1)
       commander (~> 4.1.2)
 
 GEM
@@ -15,4 +15,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  Provise!
+  provise!
