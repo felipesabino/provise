@@ -22,7 +22,7 @@ $ resign ipa -i Application.ipa -p foo/bar.mobileprovision -c "iPhone Distributi
 
 ## Reference
 
-Base on Erik (http://stackoverflow.com/users/487353/erik) original answer at 
+Based on Erik's (http://stackoverflow.com/users/487353/erik) original answer at 
 http://stackoverflow.com/a/6921689/429521
 
 
