@@ -11,6 +11,8 @@ command :ipa do |c|
 	c.option '-p', '--provisioning PROVISIONING', 'Path to the provisioning profile file (generally a .mobileprovision file)'
 	c.option '-c', '--certificate CERTIFICATE', 'Name of the Distribution Certificate name (copy it from Certificate detail\'s "Common name" at the Keychain Access)'
 	c.option '-b', '--bundle BUNDLE', 'The new bundle identifier in case your new provisioning has a differente one'
+	c.option '--bundleVersionShort VERSIONSHORT', 'The new release version (CFBundleShortVersionString)'
+	c.option '--bundleVersion VERSION', 'The new build version (CFBundleVersion)'
 	c.option '-q',	'--quiet',	'Supress warnings and info messages'
 
 	c.action do |args, options|
@@ -21,6 +23,8 @@ command :ipa do |c|
 		@provisioning_path = options.provisioning
 		@certificate_name = options.certificate
 		@new_bundle_identifier = options.bundle
+		@version_short = options.bundleVersionShort
+		@bundle_version = options.bundleVersion
 
 		return unless validate_params!
 
@@ -41,6 +45,16 @@ command :ipa do |c|
 		if @new_bundle_identifier
 			say "Changing bundle identifier to #{@new_bundle_identifier}" unless options.quiet
 			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleIdentifier #{@new_bundle_identifier}\" #{@tmp_dir}/Payload/*.app/Info.plist"
+		end
+
+		if @version_short
+			say "Changing CFBundleShortVersionString to #{@version_short}" unless options.quiet
+			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString #{@version_short}\" #{@tmp_dir}/Payload/*.app/Info.plist"
+		end
+
+		if @bundle_version
+			say "Changing CFBundleVersion to #{@bundle_version}" unless options.quiet
+			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion #{@bundle_version}\" #{@tmp_dir}/Payload/*.app/Info.plist"
 		end
 
 		say "Replacing provisioning profile" unless options.quiet
