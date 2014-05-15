@@ -61,7 +61,7 @@ command :ipa do |c|
 
 		@entitlement_parameter = "";
 		if @entitlement_file
-			say "Using entitlement file: #{@entitlement_file}"
+			say "Using entitlement file: #{@entitlement_file}" unless options.quiet
 			@entitlement_parameter = "--entitlements \"#{@entitlement_file}\""
 		end
 
