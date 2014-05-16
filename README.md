@@ -1,5 +1,7 @@
 # Provise
 
+[![Gem Version](https://badge.fury.io/rb/provise.svg)](http://badge.fury.io/rb/provise)
+
 CLI used to change the provisioning profile of an iOS App (.ipa file). Also makes possible changing the bundle identifier if the new provisioning has a different one.
 
 ## Installation
