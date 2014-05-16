@@ -1,15 +1,15 @@
 PATH
   remote: .
   specs:
-    provise (0.0.1)
+    provise (0.0.2)
       commander (~> 4.1.2)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
-    commander (4.1.2)
+    commander (4.1.6)
       highline (~> 1.6.11)
-    highline (1.6.15)
+    highline (1.6.21)
 
 PLATFORMS
   ruby
