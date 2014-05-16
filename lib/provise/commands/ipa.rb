@@ -13,6 +13,7 @@ command :ipa do |c|
 	c.option '-b', '--bundle BUNDLE', 'The new bundle identifier in case your new provisioning has a differente one'
 	c.option '--bundleVersionShort VERSIONSHORT', 'The new release version (CFBundleShortVersionString)'
 	c.option '--bundleVersion VERSION', 'The new build version (CFBundleVersion)'
+	c.option '--entitlementFile FILE', 'The new entitlement used for creating the signatures'
 	c.option '-q',	'--quiet',	'Supress warnings and info messages'
 
 	c.action do |args, options|
@@ -25,6 +26,7 @@ command :ipa do |c|
 		@new_bundle_identifier = options.bundle
 		@version_short = options.bundleVersionShort
 		@bundle_version = options.bundleVersion
+		@entitlement_file = options.entitlementFile;
 
 		return unless validate_params!
 
@@ -57,11 +59,17 @@ command :ipa do |c|
 			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion #{@bundle_version}\" #{@tmp_dir}/Payload/*.app/Info.plist"
 		end
 
+		@entitlement_parameter = "";
+		if @entitlement_file
+			say "Using entitlement file: #{@entitlement_file}" unless options.quiet
+			@entitlement_parameter = "--entitlements \"#{@entitlement_file}\""
+		end
+
 		say "Replacing provisioning profile" unless options.quiet
 		system "cp #{@provisioning_path} #{@tmp_dir}/Payload/*.app/embedded.mobileprovision"
 
 		say "Replacing existing signatures" unless options.quiet
-		system "/usr/bin/codesign -f -s \"#{@certificate_name}\" --resource-rules #{@tmp_dir}/Payload/*.app/ResourceRules.plist #{@tmp_dir}/Payload/*.app"
+		system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} --resource-rules #{@tmp_dir}/Payload/*.app/ResourceRules.plist #{@tmp_dir}/Payload/*.app"
 
 
 		new_ipa_file = "#{@ipa_filename}.resigned.ipa"
