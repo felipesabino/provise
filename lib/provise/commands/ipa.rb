@@ -40,23 +40,24 @@ command :ipa do |c|
 		system "mkdir #{@tmp_dir}"
 		system "unzip -q #{@ipa_path} -d #{@tmp_dir}"
 
+		@app_filename = Dir["#{@tmp_dir}/Payload/*.app"][0]
 
 		say "Removing old code signatures" unless options.quiet
-		system "rm -rf #{@tmp_dir}/Payload/*.app/_CodeSignature #{@tmp_dir}/Payload/*.app/CodeResources"
+		system "rm -rf #{@app_filename}/_CodeSignature #{@app_filename}/CodeResources"
 
 		if @new_bundle_identifier
 			say "Changing bundle identifier to #{@new_bundle_identifier}" unless options.quiet
-			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleIdentifier #{@new_bundle_identifier}\" #{@tmp_dir}/Payload/*.app/Info.plist"
+			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleIdentifier #{@new_bundle_identifier}\" #{@app_filename}/Info.plist"
 		end
 
 		if @version_short
 			say "Changing CFBundleShortVersionString to #{@version_short}" unless options.quiet
-			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString #{@version_short}\" #{@tmp_dir}/Payload/*.app/Info.plist"
+			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString #{@version_short}\" #{@app_filename}/Info.plist"
 		end
 
 		if @bundle_version
 			say "Changing CFBundleVersion to #{@bundle_version}" unless options.quiet
-			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion #{@bundle_version}\" #{@tmp_dir}/Payload/*.app/Info.plist"
+			system "/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion #{@bundle_version}\" #{@app_filename}/Info.plist"
 		end
 
 		@entitlement_parameter = "";
@@ -66,11 +67,14 @@ command :ipa do |c|
 		end
 
 		say "Replacing provisioning profile" unless options.quiet
-		system "cp #{@provisioning_path} #{@tmp_dir}/Payload/*.app/embedded.mobileprovision"
+		system "cp #{@provisioning_path} #{@app_filename}/embedded.mobileprovision"
 
 		say "Replacing existing signatures" unless options.quiet
-		system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} --resource-rules #{@tmp_dir}/Payload/*.app/ResourceRules.plist #{@tmp_dir}/Payload/*.app"
-
+		if File.exist? "#{@app_filename}/ResourceRules.plist"
+			system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} --resource-rules #{@app_filename}/ResourceRules.plist #{@app_filename}"
+		else
+			system "/usr/bin/codesign -f -s \"#{@certificate_name}\" #{@entitlement_parameter} #{@app_filename}"
+		end
 
 		new_ipa_file = "#{@ipa_filename}.resigned.ipa"
 
