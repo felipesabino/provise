@@ -36,7 +36,7 @@ http://stackoverflow.com/a/6921689/429521
 
 ## Changelog
 - **0.0.3**
-  - Fixes #5 - iOS ipa codesign on XCode 6.1 & Yosemite
+  - Fixes [#5](https://github.com/felipesabino/provise/issues/5) - iOS ipa codesign on XCode 6.1 & Yosemite
 - **0.0.2**
   - Added bundle version and entitlements file parameters (thanks [eilers](https://github.com/eilers))
 - **0.0.1**
