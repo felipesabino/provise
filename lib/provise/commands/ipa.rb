@@ -1,3 +1,5 @@
+require 'shellwords'
+
 command :ipa do |c|
 
 	c.syntax = '$ resign ipa [options]'
@@ -81,7 +83,7 @@ command :ipa do |c|
 		say "Packing resigned ipa file to #{new_ipa_file}" unless options.quiet
 
 		# to zip correctly, it must go to the correct path
-		script_folder = Dir.pwd.gsub(" ", "\\ ")
+		script_folder = Shellwords.escape(Dir.pwd)
 		Dir.chdir(@tmp_dir) do
 			system "zip -qr #{script_folder}/#{new_ipa_file} ./Payload/"
 		end
